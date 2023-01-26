@@ -38,7 +38,7 @@
 
 É um dos **Paradigmas de Programação**, suportado pelo PHP. 
 
-Paradigma é um padrão, conduta, forma de se fazer alguma coisa. Os dois mais difundidos são:
+Paradigma é um padrão, conduta, modelo, forma de se fazer alguma coisa. As linguagens podem ou não suportar o paradigma desejado. Os dois mais difundidos são:
 
 - Procedural / Estruturado / Imperativo - princípios:
   - sequência (interpretação gravitacional e chamada de funções);
@@ -53,4 +53,64 @@ Paradigma é um padrão, conduta, forma de se fazer alguma coisa. Os dois mais d
 
 <div id="aula02" align="center">
 <h2>Aula 02: Introdução à Orientação a Objetos.</h2>
+</div>
+
+Paradigmas:
+
+1. Procedural:
+
+Fax a chamada de procedimentos (procedures - métodos, rotinas, funções...) para manipulação de dados.
+
+A interpretação do script é uma questão sequencial, gravitacional (de cima para baixo).
+
+~~~php
+$a = 10;
+$b = 7; 
+$operador = 'soma';
+
+function calcular ($a, $b, $operador) {
+  if ($operador == 'soma') {
+    return $a + $b;
+  }
+  return false;
+}
+echo calcular($a, $b, $operador);
+~~~
+
+2. Orientação a Objetos:
+
+Estrutura de dados com seus respectivos comportamentos.
+
+~~~php
+class Calculadora {
+  public $a = 10;
+  public $b = 7; 
+  public $operador = 'soma';
+}
+
+public function calcular () {
+  if($this->operador == 'soma') {
+    return $this->a + $this->b;
+  }
+  return false; 
+}
+
+$calcular = new Calculadora();
+echo $calcular->calcular();
+~~~
+
+Há uma mudança na forma de pensamento e programação!
+
+Abstração = forma como se interpreta o que ocorre no mundo real.
+
+Os pilates da OO são:
+1. Abstração;
+2. Encapsulamento;
+3. Herança;
+4. Polimisfismo.
+
+<hr>
+
+<div id="aula03" align="center">
+<h2>Aula 03: OO - Pilar da Abstração. </h2>
 </div>
