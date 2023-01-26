@@ -36,3 +36,21 @@
 <h2>Aula 01: Introdução à Orientação a Objetos - Considerações preliminares.</h2>
 </div>
 
+É um dos **Paradigmas de Programação**, suportado pelo PHP. 
+
+Paradigma é um padrão, conduta, forma de se fazer alguma coisa. Os dois mais difundidos são:
+
+- Procedural / Estruturado / Imperativo - princípios:
+  - sequência (interpretação gravitacional e chamada de funções);
+  - decisão (aplicação de comandos como if/else e switch) 
+  - e repetição (aplicação de comandos como for, while e do while).
+
+- Orientado a Objetos
+  - considerado sucessor do procedural, mas na verdade, se completam.
+  - seus princípios serão abordados neste módulo!
+  
+<hr>
+
+<div id="aula02" align="center">
+<h2>Aula 02: Introdução à Orientação a Objetos.</h2>
+</div>
