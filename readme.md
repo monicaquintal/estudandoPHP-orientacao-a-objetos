@@ -6,7 +6,7 @@
 
 <div align="justify">
 
-[Introdução ao PHP.](https://github.com/monicaquintal/estudandoPHP)
+<a href="https://github.com/monicaquintal/estudandoPHP" target="_blank">Introdução ao PHP.</a>
 
 ## Conteúdo
 
@@ -114,3 +114,81 @@ Os pilates da OO são:
 <div id="aula03" align="center">
 <h2>Aula 03: OO - Pilar da Abstração. </h2>
 </div>
+
+### Abstração:
+Consiste na forma como nós interpretamos as coisas do mundo real e transportamos para nossas aplicações.
+
+### Conceitos:
+
+1. Entidade: é a compreensão de que um objeto do mundo real deve passar para dentro da aplicação.
+
+2. Identidade: é no processo de criação ou instância do projeto, com base nos modelos, que podemos criar uma associação de identidade (trata-se de uma referência que irá, futuramente, nos permitir acessar o objeto em questão).
+
+3. Características: atributos.
+
+4. Ações: métodos (são, na essência, funções) ou comportamentos.
+
+Entidade | Identidade | Catacterísticas | Ações
+---------|------------|------------------|----------
+Produto | x = new Produto() | categoria, título, descrição, valor | exibirResumoProduto, alterarValorProduto
+Ideia | z = new Ideia() | tipo, descrição, complexidade | modificarTipoIdeia
+Funcionario | y = new Funcionario() | nome, telefone, numFilhos | resumirCadFunc, modificarNumFilhos
+
+Ou seja, ao invés de apenas enviar dados para funções, criaremos objetos (dados), dentro do qual vamos inserir comportamentos!
+
+### Praticando:
+
+> arquivo `oo_pilar_abstracao.php`
+
+Exemplo de relatório que apresente os funcionários da empresa.
+
+- Entidade: Funcionario
+- Identidade: y = new Funcionario()
+- Características: nome, telefone, numFilhos
+- Ações: resumirCadFunc, modificarNumFilhos
+
+**Utilizar o padrão CamelCase para definir a entidade!** E, nos atributos/variáveis/funções, utilizar a partir da 2a palavra!
+
+**Modelo:**
+
+~~~php
+class Funcionario {
+
+  //atributos
+  public $nome = null;
+  public $telefone = null;
+  public $numFilhos = null;
+
+  //métodos
+  function resumirCadFunc() {
+    return 'Esse é o resumo do cadastro do funcionário:';
+  }
+
+  function modificarNumFilhos() {
+    // afetar um atributo do objeto
+  }
+
+}
+~~~
+
+**Instanciando objetos:**
+
+~~~php
+// criando um objeto com base no modelo Funcionário, e aribuindo esse objeto à variável y (dando acesso aos atributos e métodos!
+$y = new Funcionario();
+// chamando o atributo ou método desejado
+echo $y->resumirCadFunc();
+echo '<br>';
+$y->modificarNumFilhos(3);
+echo $y->resumirCadFunc();
+~~~
+
+O operador `$this` é um operador de ajuste de contexto. Ele indica ao interpretador do PHP que estamos falando do atributo do objeto em questão.
+
+<hr>
+
+<div id="aula04" align="center">
+<h2>Aula 04: Getters e Setters. </h2>
+</div>
+
+São métodos utilizados para manipulação de atributos.
