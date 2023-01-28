@@ -342,3 +342,49 @@ function resumirCadFunc() {
 <div id="aula07" align="center">
 <h2>Aula 07: Método Construtor e Destrutor (Construct e Destruct). </h2>
 </div>
+
+São conhecidos como **métodos mágicos** `__construct()` e `__destruct()`!
+
+Fazem parte do "ciclo de vida" de um objeto: quando criamos a instância de um objeto com base em uma classe, automaticamente o método construtor é executado, de modo que uma ação possa ser tomada no processo de inicialização do objeto. Já o método destrutor, é executado automaticamente quando a instância do objeto é removida da m,memória (quando o objeto deixa de existir).
+
+> arquivo `construtor_destrutor.php`
+
+Exemplo:
+
+~~~php
+class Pessoa {
+
+  public $nome = null;
+
+  function __construct($nome) {
+    echo "Objeto iniciado!" . "<br>";;
+    $this->nome = $nome;
+  }
+
+  function __destruct(){
+    echo "Objeto removido!";
+  }
+
+  function __get($atributo) {
+    return $this->$atributo;
+  }
+
+  function correr() {
+    return $this->__get('nome') . " está correndo!";
+  }
+
+}
+
+$pessoa = new Pessoa('Mônica'); // instanciando o objeto
+echo 'Nome: ' . $pessoa->__get('nome') . '<br>';
+echo $pessoa->correr();
+
+echo '<br>';
+//unset($pessoa); // proposital
+~~~
+
+<hr>
+
+<div id="aula08" align="center">
+<h2>Aula 08: OO - Pilar da Herança.</h2>
+</div>
