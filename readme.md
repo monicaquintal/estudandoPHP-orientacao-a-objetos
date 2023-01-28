@@ -6,7 +6,7 @@
 
 <div align="justify">
 
-<a href="https://github.com/monicaquintal/estudandoPHP" target="_blank">Introdução ao PHP.</a>
+<a target="_blank" href="https://github.com/monicaquintal/estudandoPHP">Introdução ao PHP.</a>
 
 ## Conteúdo
 
@@ -18,7 +18,7 @@
 <a href="#aula06">Aula 06: Chamando métodos internamente.</a><br>
 <a href="#aula07">Aula 07: Método Construtor e Destrutor (Construct e Destruct).</a><br>
 <a href="#aula08">Aula 08: OO - Pilar da Herança.</a><br>
-<a href="#aula09">Aula 09: Pilar do Polimorfismo.</a><br>
+<a href="#aula09">Aula 09: OO - Pilar do Polimorfismo.</a><br>
 <a href="#aula10">Aula 10: OO - Pilar do Encapsulamento parte 1.</a><br>
 <a href="#aula11">Aula 11: OO - Pilar do Encapsulamento parte 2.</a><br>
 <a href="#aula12">Aula 12: Atributos e métodos estáticos.</a><br>
@@ -372,7 +372,6 @@ class Pessoa {
   function correr() {
     return $this->__get('nome') . " está correndo!";
   }
-
 }
 
 $pessoa = new Pessoa('Mônica'); // instanciando o objeto
@@ -387,4 +386,198 @@ echo '<br>';
 
 <div id="aula08" align="center">
 <h2>Aula 08: OO - Pilar da Herança.</h2>
+</div>
+
+Segundo príncipio que sustenta o paradigma da Orientação a Objetos.
+
+A Herança traz dois benefícios ao código:
+1. Reutilizável
+2. Manutenção
+
+Exercício de abstração:
+
+~~~php
+// CARRO:
+$placa
+$cor
+$teto_solar
+
+$acelerar() {}
+$abrirTetoSolar() {}
+$alterarPosicaoVolante() {}
+
+// MOTO:
+$placa
+$cor
+$contra_peso_guidao
+
+$acelerar() {}
+$empinar() {}
+~~~
+
+Em php, inicialmente, temos:
+
+~~~php
+class Carro {
+  public $placa = 'ABC1234';
+  public $cor = 'branco';
+  public $teto_solar = true;
+
+  function acelerar() {
+    echo 'Acelerar';
+  }
+
+  function abrirTetoSolar() {
+    echo 'Abrir teto solar';
+  }
+
+  function alterarPosicaoVolante() {
+    echo 'Alterar posição do volante';
+  }
+}
+
+class Moto {
+  public $placa = 'DEF1122';
+  public $cor = 'preta';
+  public $contra_peso_guidao = true;
+
+  function acelerar() {
+    echo 'Acelerar';
+  }
+
+  function empinar() {
+    echo 'Empinar';
+  }
+}
+
+$carro = new Carro();
+$moto = new Moto();
+
+echo '<pre>';
+print_r($carro);
+print_r($moto);
+echo '</pre>';
+~~~
+
+E, exibindo os dados no browser:
+
+~~~
+Carro Object
+(
+    [placa] => ABC1234
+    [cor] => branco
+    [teto_solar] => 1
+)
+Moto Object
+(
+    [placa] => DEF1122
+    [cor] => preta
+    [contra_peso_guidao] => 1
+)
+~~~
+
+A **herança** também é um exercício de abstração: a ideia é compreender o que existe em comum entra os objetos da nossa aplicação, que possa sr abstraído e definido em outro modelo. Ou seja, **centralizar atributos e métodos comuns aos objetos, de modo a implementar outras classes (especialistas)**.
+
+Podemos observar que, no exemplo, os atributos `$placa` e `$cor` são comuns aos objetos carro e moto, assim como o método `$acelerar() {}`!
+
+Podemos, então, centralizar essas características e ações dentro de um terceiro modelo! (podemos utilizar também os termos `Classe Pai/Filhos` e `Classes Genérica/Especializadas` ou `Superclasse/Subclasses`).
+
+Precisamos explicitar a relação de Herança no código! Para isso, utilizar: 
+
+~~~
+class Filho extends Pai () {
+  <...>
+}
+~~~
+
+E, no exemplo da aula, teremos:
+
+~~~php
+class Carro extends Veiculo {
+  public $teto_solar = true;
+
+  function __construct($placa, $cor) {
+    $this->placa = $placa;
+    $this->cor = $cor;
+  }
+
+  function abrirTetoSolar() {
+    echo 'Abrir teto solar';
+  }
+
+  function alterarPosicaoVolante() {
+    echo 'Alterar posição do volante';
+  }
+}
+
+class Moto extends Veiculo {
+  public $contra_peso_guidao = true;
+
+  function __construct($placa, $cor) {
+    $this->placa = $placa;
+    $this->cor = $cor;
+  }
+
+  function empinar() {
+    echo 'Empinar';
+  }
+}
+
+class Veiculo {
+  public $placa = null;
+  public $cor = null;
+
+  function acelerar() {
+    echo 'Acelerar';
+  }
+}
+
+$carro = new Carro('ABC1234', 'branco');
+$moto = new Moto('DEF1122', 'preta');
+
+echo '<pre>';
+print_r($carro);
+print_r($moto);
+echo '</pre>';
+echo '<hr>';
+
+echo $carro->abrirTetoSolar();
+echo '<br>';
+echo $carro->acelerar();
+echo '<hr>';
+
+echo $moto->empinar();
+echo '<br>';
+echo $moto->acelerar();
+~~~
+
+Explorando a vantagem de **manutenção do código**:
+
+Caso precisemos, por exemplo, criar o método `frear(){}`, comum ao carro e à moto, poderemos simplesmente defini-lo na Classe Veiculo, e passar a utiliza-lo nos objetos especializados Carro e Moto!
+
+~~~php
+class Veiculo {
+  public $placa = null;
+  public $cor = null;
+
+  function acelerar() {
+    echo 'Acelerar';
+  }
+
+  function frear() {
+    echo "Frear";
+  }
+}
+
+<...>
+
+echo $carro->frear();
+echo '<hr>';
+echo $moto->frear();
+~~~
+
+<hr>
+
+<div id="aula09" align="center">
+<h2>Aula 09: OO - Pilar do Polimorfismo.</h2>
 </div>
