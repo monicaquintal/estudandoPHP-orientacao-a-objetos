@@ -394,6 +394,8 @@ A Herança traz dois benefícios ao código:
 1. Reutilizável
 2. Manutenção
 
+> arquivo `oo_pilar_heranca.php`
+
 Exercício de abstração:
 
 ~~~php
@@ -581,3 +583,81 @@ echo $moto->frear();
 <div id="aula09" align="center">
 <h2>Aula 09: OO - Pilar do Polimorfismo.</h2>
 </div>
+
+Polimorfismo consiste na sobrescrita de métodos.
+
+> arquivo `oo_pilar_polimorfismo.php`
+
+Continuaremos trabalhando com o exemplo da aula anterior (oo_pilar_heranca.php), porém no novo arquivo oo_pilar_polimorfismo.php).
+
+~~~php
+// VEICULO
+$plaa
+$cor
+
+$acelerar() {}
+$frear() {}
+$trocarMarcha() {}
+// Herança
+
+// CARRO
+$teto_solar
+
+$abrirTetoSolar() {}
+$alterarPosicaoVolante() {}
+
+// MOTO
+$contra_peso_guidao
+
+$empinar() {}
+$trocarMarcha() {}
+~~~
+
+A Classe Veículo, da aula anterior, passará a possuir o novo método `$trocarMarcha() {}`, comportamento comum tanto para carro quanto para moto. Entretanto, o objeto Moto possui uma particularidade na forma como troca a marcha (usamos a mão para desengatar embreagem e pé para engatar a marcha).
+
+Aplicando no código:
+
+~~~php
+<...>
+class Veiculo {
+<...>
+  function trocarMarcha() {
+    echo "Desengatar embreagem com o pé e engatar marcha com a mão";
+  }
+}
+
+$carro = new Carro('ABC1234', 'branco');
+$moto = new Moto('DEF1122', 'preta');
+
+$carro->trocarMarcha();
+echo '<br>';
+$moto->trocarMarcha();
+
+// Dessa forma, imprime resultados iguais para carro e moto; como proceder para indicar a particularidade do método trocarMarcha(){} na Classe Moto?
+~~~
+
+Temos duas possibilidades:
+
+1. implementar um método específico para o Filho dentro da Classe Pai (inadequado, fere o princípio do Polimorfismo, causando redundância de código, já que todos os filhos o herdariam).
+
+2. definir NO OBJETO FILHO como esse método deve se comportar!
+
+Para sobrescrever o método, é simples: basta definir no objeto filho como esse método deve se comportar para este objeto!
+
+~~~php
+class Moto extends Veiculo {
+<...>
+  function trocarMarcha() {
+    echo "Desengatar embreagem com a mão e engatar marcha com o pé";
+  }
+}
+<...>
+~~~
+
+<hr>
+
+<div id="aula10" align="center">
+<h2>Aula 10: OO - Pilar do Encapsulamento parte 1.</h2>
+</div>
+
+> arquivo ``
