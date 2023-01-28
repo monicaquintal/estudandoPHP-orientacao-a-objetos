@@ -4,13 +4,31 @@
   class Funcionario {
 
     //atributos
-    public $nome = 'José';
-    public $telefone = '11 99999-9999';
-    public $numFilhos = 2;
+    public $nome = null;
+    public $telefone = null;
+    public $numFilhos = null;
+
+    // métodos setters
+    function setNome($nome) {
+    $this->nome = $nome;
+    }
+
+    function setNumFilhos($numFilhos) {
+      $this->numFilhos = $numFilhos;
+      }
+
+    //métodos getters
+    function getNome() {
+      return $this->nome;
+    }
+
+    function getNumFilhos() {
+      return $this->numFilhos;
+    }
 
     //métodos
     function resumirCadFunc() {
-      return "$this->nome possui $this->numFilhos filho(s)";
+      return "$this->nome possui $this->numFilhos filho(s)!";
     }
 
     function modificarNumFilhos($numFilhos) {
@@ -21,19 +39,18 @@
 
   }
 
-  // criando um objeto com base no modelo Funcionário, e aribuindo esse objeto à variável y (dando acesso aos atributos e métodos!
+
   $y = new Funcionario();
-  // chamando o atributo ou método desejado
-  echo $y->resumirCadFunc();
-  echo '<br>';
-  $y->modificarNumFilhos(3);
-  echo $y->resumirCadFunc();
+  $y->setNome("Mônica");
+  $y->setNumFilhos(1);
+  //echo $y->resumirCadFunc();  **OU:**
+  echo $y->getNome() . ' possui ' . $y->numFilhos . ' filho(s).';
   echo '<hr>';
 
-  //criando variável x e atribuindo a ela uma nova instância de Funcionário (um novo objeto)
   $x = new Funcionario();
-  echo $x->resumirCadFunc();
-  echo '<br>';
-  $x->modificarNumFilhos(1);
-  echo $x->resumirCadFunc();
+  $x->setNome("João");
+  $x->setNumFilhos(3);
+  echo $x->getNome() . ' possui ' . $x->numFilhos . ' filho(s).';
+
+
 ?>

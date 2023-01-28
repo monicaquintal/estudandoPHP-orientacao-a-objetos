@@ -174,13 +174,23 @@ class Funcionario {
 **Instanciando objetos:**
 
 ~~~php
-// criando um objeto com base no modelo Funcionário, e aribuindo esse objeto à variável y (dando acesso aos atributos e métodos!
+// criando um objeto com base no modelo Funcionário, 
+// e atribuindo esse objeto à variável (dando acesso aos atributos/métodos).
 $y = new Funcionario();
 // chamando o atributo ou método desejado
 echo $y->resumirCadFunc();
 echo '<br>';
 $y->modificarNumFilhos(3);
 echo $y->resumirCadFunc();
+echo '<hr>';
+
+//criando variável x 
+//e atribuindo a ela uma nova instância de Funcionário (novo objeto)
+$x = new Funcionario();
+echo $x->resumirCadFunc();
+echo '<br>';
+$x->modificarNumFilhos(1);
+echo $x->resumirCadFunc();
 ~~~
 
 O operador `$this` é um operador de ajuste de contexto. Ele indica ao interpretador do PHP que estamos falando do atributo do objeto em questão.
@@ -191,4 +201,59 @@ O operador `$this` é um operador de ajuste de contexto. Ele indica ao interpret
 <h2>Aula 04: Getters e Setters. </h2>
 </div>
 
-São métodos utilizados para manipulação de atributos.
+> arquivo `oo_pilar_abstracao.php`
+
+São métodos utilizados para manipulação de atributos, que permitem atender uma convenção/boas práticas (que indica qual a melhor forma de **acessar e manipular os atributos dos objetos**).
+
+O ideal é que as classes sejam genéricas, com atributos que não sejam engessados.
+
+### 1. Métodos Setters:
+
+Sua finalidade é settar ou definir os valores dos atributos dos objetos. Esse método receberá um parâmetro, o recuperará e atribuirá esse valor ao atributo do objeto. 
+
+São métodos do tipo void, que apenas recebem determinado valor e manipulam, sem gerar retorno.
+
+**Importante:** Sempre iniciar com a palavra `set` (boa prática).
+
+Exemplo:
+
+~~~php
+function setNome($nome) {
+  $this->nome = $nome;
+}
+
+function setNumFilhos($numFilhos) {
+  $this->numFilhos = $numFilhos;
+}
+~~~
+
+### 2. Métodos Getters:
+
+Permitem recuperar os valores dos atributos. São métodos do tipo return, que retornarão o atributo solicitado.
+
+**Importante:** Sempre iniciar com a palavra `get` (boa prática).
+
+~~~php
+function getNome() {
+  return $this->nome;
+}
+
+function getNumFilhos() {
+  return $this->numFilhos;
+}
+~~~
+
+### 3. Instanciando um novo objeto:
+
+~~~php
+$y = new Funcionario();
+$y->setNome("Mônica");
+$y->setNumFilhos(1);
+echo $y->resumirCadFunc(); // OU:
+echo $y->getNome() . ' possui ' . $y->numFilhos . ' filho(s).';
+
+$x = new Funcionario();
+$x->setNome("João");
+$x->setNumFilhos(3);
+echo $x->getNome() . ' possui ' . $x->numFilhos . ' filho(s).';
+~~~
