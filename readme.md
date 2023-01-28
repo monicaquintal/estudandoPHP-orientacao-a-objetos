@@ -243,7 +243,7 @@ function getNumFilhos() {
 }
 ~~~
 
-### 3. Instanciando um novo objeto:
+### 3. Instanciando objetos:
 
 ~~~php
 $y = new Funcionario();
@@ -257,3 +257,70 @@ $x->setNome("João");
 $x->setNumFilhos(3);
 echo $x->getNome() . ' possui ' . $x->numFilhos . ' filho(s).';
 ~~~
+
+<hr>
+
+<div id="aula05" align="center">
+<h2>Aula 05: Getters e Setters mágicos (overloading de atributos e métodos). </h2>
+</div>
+
+> arquivo `oo_pilar_abstracao.php`
+
+Atualmente, questiona-se de utilizar métodos getters e setters consiste em uma boa prática, pois torna o código extenso e redundante - cria um conflito entre um pilar e a prática!
+
+Há algumas formas de atender ao que é considerado boa prática (utilizando getters e setters), porém de uma forma mais inteligente, através da criação de métodos mágicos, utilizando o conceito de `overloading` ou sobrecarga: criar **um único método set e um único método get, capaz de se adaptar ao atributo que queremos manipular**.
+
+Por convenção, adotar:
+
+~~~php
+function __set() { //dois underlines
+  <...>
+}
+~~~
+
+Na prática:
+
+~~~php
+class Funcionario {
+
+//atributos
+public $nome = null;
+public $telefone = null;
+public $numFilhos = null;
+public $cargo = null;
+public $salario = null;
+
+//getters setters (overloading / sobrecarregar)
+function __set($atributo, $valor) {
+  $this->$atributo = $valor;
+}
+
+function __get($atributo) {
+  return $this->$atributo;
+}
+
+function resumirCadFunc() {
+  return "$this->nome possui $this->numFilhos filho(s)!";
+}
+
+function modificarNumFilhos($numFilhos) {
+  $this->numFilhos = $numFilhos;
+}
+}
+
+$y = new Funcionario();
+$y->__set('nome', 'José');
+$y->__set('numFilhos', 2);
+echo $y->__get('nome') . ' possui ' . $y->__get('numFilhos') . ' filho(s) ';
+echo '<br />';
+$x = new Funcionario();
+$x->__set('nome', 'Maria');
+$x->__set('numFilhos', 0);
+echo $x->__get('nome') . ' possui ' . $x->__get('numFilhos') . ' filho(s) ';
+~~~
+
+<hr>
+
+<div id="aula06" align="center">
+<h2>Aula 06: Chamando métodos internamente. </h2>
+</div>
