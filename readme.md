@@ -322,5 +322,23 @@ echo $x->__get('nome') . ' possui ' . $x->__get('numFilhos') . ' filho(s) ';
 <hr>
 
 <div id="aula06" align="center">
-<h2>Aula 06: Chamando métodos internamente. </h2>
+<h2>Aula 06: Chamando métodos internamente.</h2>
+</div>
+
+> arquivo `oo_pilar_abstracao.php`
+
+Chamar métodos dentro de outros métodos é uma implementação muito comum!
+
+Exemplo:
+
+~~~php
+function resumirCadFunc() {
+  return $this->__get('nome') . " possui " . $this->__get('numFilhos') . " filho(s)!";
+}
+~~~
+
+<hr>
+
+<div id="aula07" align="center">
+<h2>Aula 07: Método Construtor e Destrutor (Construct e Destruct). </h2>
 </div>
