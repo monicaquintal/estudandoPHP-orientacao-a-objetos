@@ -1013,3 +1013,86 @@ Assim como atributos, métodos protected podem ser sobrepostos dentro do objeto 
 <h2>Aula 12: Atributos e métodos estáticos.</h2>
 </div>
 
+Atributos e métodos estáticos podem ser acessados sem que seja realizada a instância de um objeto com base em uma classe.
+
+> arquivo `atributos_e_metodos_estaticos.php`
+
+Atributos e métodos estáticos precisam receber a palavra reservada `static`, inserida após o operador de visibilidade.
+
+~~~php
+class Exemplo {
+  public static $atributo1 = 'Eu sou um atributo estático!';
+  public $atributo2 = 'Eu sou um atributo normal!';
+  
+  public static function metodo1 () {
+    echo 'Eu sou um método estático.';
+  }
+
+  public function metodo2 () {
+    echo 'Eu sou um método normal.';
+  }
+}
+~~~
+
+Nos exercícios anteriores, após uma classe ser definida,  utilizamos a instrução abaixo para instanciar o objeto com base no modelo, associando-o a uma variável: 
+
+~~~php
+$x = new Exemplo;
+~~~
+
+E, a partir da instância do objeto, passamos a ter acesso aos seus respectivos atributos e métodos!
+
+Porém, ***quando estamos trabalhando com atributos e métodos estáticos, não existe a necessidade de fazer a instância do objeto para utilização desses atributos e métodos estáticos da classe***.
+
+A partir do nome da classe, utilizando o operador `::`, podemos acessar diretamente atributos/métodos estáticos! Exemplo:
+
+~~~php
+echo Exemplo::$atributo1;
+// retorno: Eu sou um atributo estático!
+Exemplo::metodo1();
+// retorno: Eu sou um método estático.
+~~~
+
+No caso de atributos e métodos **não estáticos**:
+
+~~~php
+echo Exemplo::$atributo2;
+// Fatal error: Uncaught Error: Access to undeclared static property Exemplo::$atributo2
+
+Exemplo::metodo2();
+// Fatal error: Uncaught Error: Non-static method Exemplo::metodo2() cannot be called statically
+~~~
+
+Ou seja, a `sintaxe/operador de resolução de escopo` ("::") deve ser utilizada APENAS para acesso a atributos e métodos estáticos!
+
+### Observações importantes:
+
+1. Atributos estáticos podem ser instanciados, mas não podem ser acessados pelo operador "->". Exemplo:
+
+~~~php
+$x = new Exemplo();
+echo $x->atributo1;
+// retorno:
+// Notice: Accessing static property Exemplo::$atributo1 as non static
+// Warning: Undefined property: Exemplo::$atributo1
+echo $x->atributo2;
+//retorno: Eu sou um atributo normal!
+~~~
+
+2. Em relação aos métodos estáticos, não podemos utilizar o operados $this (que ajusta o contexto das variáveis internas dos métodos)! Isso ocorre pois podemos chamar métodos estáticos sem que um objeto seja instanciado.
+
+~~~php
+public static function metodo1 () {
+  echo $this->atributo2;
+  echo 'Eu sou um método estático.';
+}
+
+// retorno
+// Fatal error: Uncaught Error: Using $this when not in object context
+~~~
+
+<hr>
+
+<div id="aula13" align="center">
+<h2>Aula 13: Interfaces.</h2>
+</div>
