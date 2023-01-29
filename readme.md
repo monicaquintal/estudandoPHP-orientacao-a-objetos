@@ -633,7 +633,9 @@ $carro->trocarMarcha();
 echo '<br>';
 $moto->trocarMarcha();
 
-// Dessa forma, imprime resultados iguais para carro e moto; como proceder para indicar a particularidade do método trocarMarcha(){} na Classe Moto?
+/* Dessa forma, imprime resultados iguais para carro e moto;
+ como proceder para indicar a particularidade 
+ do método trocarMarcha(){} na Classe Moto? */
 ~~~
 
 Temos duas possibilidades:
@@ -660,4 +662,180 @@ class Moto extends Veiculo {
 <h2>Aula 10: OO - Pilar do Encapsulamento parte 1.</h2>
 </div>
 
-> arquivo ``
+Do **ponto de vista conceitual**, consiste em encapsular um objeto, tornando-o seguro. Significa que o objeto terá condições de dizer o que dentro dele está disponível para o sistema.
+
+É uma forma de controlar a visibilidade dos atributos e métodos de acordo com as necessidades.
+
+**Na prática**, podemos definir se um determinado atributo/método é privado ou público, ou se esse atributo/método deve ou não ser herdado pelos seus filhos, criando uma camada de segurança para cada um dos objetos da nossa aplicação!!!
+
+Exemplo:
+
+<div align="center">
+<img src="./imagens/oo_pilar_encapsulamento.png" width="80%">
+</div>
+
+Neste caso, temos atributos e métodos configurados com visibilidades diferentes. Portanto, quando abordamos esse conceito de Encapsulamento, é importante ter em mente os operadores de visibilidade: public, protected e private.
+
+> arquivo `oo_pilar_encapsulamento.php`
+
+`Atributos públicos` estão disponíveis para serem acessados diretamente pela instância do objeto; ou seja, tanto para aplicação quanto para outros objetos. Ou seja, está disponível para o mundo!
+
+~~~php
+class Pai {
+  public $humor = "com sono";
+}
+
+$pai = new Pai();
+
+echo $pai->humor;
+$pai->humor = 'feliz';
+echo '<br>';
+echo $pai->humor;
+~~~
+
+Porém, caso tentemos realizar a mesma ação (acessando diretamete) em atributos private ou protected, teremos um erro (indica que o acesso a propriedades privadas/protegidas está bloqueado - É UM NÍVEL DE SEGURANÇA!) Ou seja, estarão disponíveis apenas para o próprio objeto.
+
+~~~php
+$pai = new Pai();
+echo $pai->nome;
+// Fatal error: Uncaught Error: Cannot access private property Pai::$nome (...)
+
+echo $pai->sobrenome;
+// Fatal error: Uncaught Error: Cannot access protected property Pai::$sobrenome
+~~~
+
+Do ponto de vista da interação Objeto-Aplicação, os operadores protected e private serão idênticos, não estando disponíveis para a aplicação. ***Porém, eles se comportam de forma diferente no processo de herança!***
+
+### Por que criar atributos protegidos?
+
+Geralmente, atributos privados ou protegidos são criados para que sua modificação dependa de alguma regra de negócio (Interface!), a qual deve ser respeitada sempre que esses atributos ou métodos forem acessados.
+
+Logo, o mais coerente é disponibilizar o acesso desses atributos somente a partir de uma interface que implemente
+essas regras de negócio.
+
+~~~php
+class Pai {
+  private $nome = "Mônica";
+
+  public function getNome() {
+    return $this->nome;
+  }
+
+  public function setNome($value) {
+    $this->nome = $value;
+  }
+}
+
+$pai = new Pai();
+
+echo $pai->getNome();
+echo '<br>';
+$pai->setNome("João");
+echo $pai->getNome();
+~~~
+
+Portanto, através dos `métodos de interface`, poderemos manipular atributos privados ou protegidos (podendo estabelecer uma regra de negócio)!
+
+O exemplo abaixo trata-se de "regra de negócio". É um nível de segurança, onde o valor do atributo só será modificado a partir de um método público de interface de objeto, que atenda a uma determinada regra de negócio!
+
+~~~php
+// método de interface
+  public function setNome($value) { 
+    if(strlen($value) >= 3) {
+      $this->nome = $value;
+    }
+  }
+
+echo $pai->getNome(); // retorna "Mônica"
+echo '<br>';
+$pai->setNome("João");
+echo $pai->getNome(); // retorna "João"
+echo '<br>';
+$pai->setNome("Oi");
+echo $pai->getNome(); // retorna "João" novamente
+// (pois não atende à regra)
+~~~
+
+O mesmo efeito ocorrerá para o atributo "protected", no que se refere à visibilidade (interação script-objeto.)
+
+### Métodos mágicos __set() e __get():
+
+Estão preparados para trabalhar com atributos privados e protegidos. Ao serem definidos, ganhamos a possibilidade de acessar diretamente estes atributos, a partir da instância do objeto (podendo inclusive atribuir valores diretamente a esses atributos ptivados/protegidos).
+
+Exemplo:
+
+~~~php
+class Pai {
+  private $nome = "Mônica";
+  protected $sobrenome = "Quintal";
+  public $humor = "com sono";
+
+  public function __get($atributo) {
+    return $this->$atributo;
+  }
+
+  public function __set($atributo, $valor) {
+    $this->$atributo = $valor;
+  }
+}
+
+$pai = new Pai();
+echo $pai->humor;
+echo "<br>";
+echo $pai->nome;
+echo "<br>";
+echo $pai->sobrenome;
+echo "<br>";
+echo $pai->sobrenome = "Oliveira";
+~~~
+
+### Implementando métodos:
+
+Os operadores de visibilidade aplicados aos métodos funcionam de forma análoga ao que vimos em relação aos atributos:
+
+- atributos e métodos públicos: disponíveis para aplicação e para outros objetos.
+
+- métodos privados ou protegidos: disponíveis apenas para o próprio projeto, quando estamos falando da relação entre a aplicação e o objeto.
+
+~~~php
+private function executarMania() {
+  echo "Assoviar";
+}
+
+protected function responder() {
+  echo "Oi!";
+}
+
+echo $pai->executarMania();
+// Fatal error: Uncaught Error: Call to private method Pai::executarMania() from global scope
+echo $pai->responder();
+// Fatal error: Uncaught Error: Call to protected method Pai::responder() from global scope
+~~~
+
+Para acessar esses métodos protegidos ou privados, precisaremos de um método público, que faça a interface entre a aplicação e o objeto!
+
+Exemplo:
+
+~~~php
+  private function executarMania() {
+    echo "Assoviar";
+  }
+
+  public function executarAcao() {
+    $this->executarMania();
+    echo '<br>';
+    $this->responder();
+  }
+
+$pai = new Pai();
+echo $pai->executarAcao();
+// "Assoviar"
+// Oi!
+~~~
+
+<hr>
+
+<div id="aula11" align="center">
+<h2>Aula 11: OO - Pilar do Encapsulamento parte 2.</h2>
+</div>
+
