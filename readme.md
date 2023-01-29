@@ -839,3 +839,177 @@ echo $pai->executarAcao();
 <h2>Aula 11: OO - Pilar do Encapsulamento parte 2.</h2>
 </div>
 
+> arquivo `oo_pilar_encapsulamento.php`
+(dando continuidade ao conteúdo e arquivo da aula anterior)
+
+### Como o princípio de Encapsulamento se comporta no contexto de Herança?
+
+### A) Atributos:
+
+ A Classe Filho automaticamente herda ***todos*** os atributos e métodos da classe Pai cujos operadores de visibilidade estejam settados como ***public e protected***.
+
+Ou seja, ***no processo de herança, `atributos e métodos private não são herdados`***.
+
+~~~php
+class Filho extends Pai {
+  public function getAtributo($atributo) {
+    return $this->$atributo;
+  }
+}
+
+$filho = new Filho();
+echo $filho->getAtributo('humor');
+// recupera "com sono"
+echo '<br>';
+echo $filho->getAtributo('sobrenome');
+//retorna "Quintal"
+echo '<br>';
+echo $filho->getAtributo('nome');
+// Warning: Undefined property: Filho::$nome
+// erro; é um atributo específico da Classe Pai (private)!
+// não faz parte do contexto do objeto filho!
+~~~
+
+Testando a modificação do estado do objeto:
+
+~~~php
+class Filho extends Pai {
+  public function getAtributo($atributo) {
+    return $this->$atributo;
+  }
+
+  public function setAtributo($atributo, $valor) {
+    $this->$atributo = $valor;
+  }
+}
+
+$filho->setAtributo('humor', 'feliz');
+echo $filho->getAtributo('humor');
+// recupera "feliz"
+echo '<br>';
+$filho->setAtributo('sobrenome', 'Oliveira');
+echo $filho->getAtributo('sobrenome');
+// recupera "Oliveira"
+echo '<br>';
+$filho->setAtributo('nome', 'João');
+echo $filho->getAtributo('nome');
+echo '<br>';
+// recupera "João"
+~~~
+
+Conforme indicado acima, podemos criar atributos dinâmicos no contexto do objeto, mesmo quando se trata de um operador de visibilidade privada (atributo específico da Classe Pai); ou seja, apesar do nome ser `private`, podemos alterar e recuperar o seu valor dinamicamente. Portanto, quando utilizamos o mpetodo público e alteramos o seu valor, cria-se um **novo atributo (que será público), com novo valor** (não equivale ao atributo original, que é *específico* da Classe Pai)!!!
+
+### B) Métodos mágicos __set() e __get():
+
+A função nativa `get_class_methods()` espera receber por parâmetro um objeto, e retorna um array com a relação de métodos internos deste objeto!
+
+~~~php
+// exibir os métodos do objeto
+echo '<pre>';
+print_r(get_class_methods($filho));
+echo '</pre>';
+
+/*
+Array
+(
+    [0] => __get
+    [1] => __set
+    [2] => executarAcao
+)
+*/
+~~~
+
+O método mágico definido tem a inteligência de acessar o atributo do objeto Pai, já que get e set foram inicialmente definidos no mesmo contexto, que é o objeto pai!!!
+
+~~~php
+class Pai {
+  private $nome = "Mônica";
+  protected $sobrenome = "Quintal";
+  public $humor = "com sono";
+
+  public function __get($atributo) {
+    return $this->$atributo;
+  }
+
+  public function __set($atributo, $valor) {
+    $this->$atributo = $valor;
+  }
+}
+
+$filho = new Filho();
+
+echo $filho->__get('nome');
+// recupera "Mônica"
+echo '<br>';
+echo $filho->__set('nome', 'João');
+echo $filho->__get('nome');
+// recupera "João"
+
+~~~
+
+Porém, se os métodos get e set forem definidos no objeto filho, irão trabalhar apenas no contexto do objeto filho (não consegue rastrear atributo privado da Classe Pai, por exemplo)!
+
+Ou seja, o contexto dos métodos mágicos influencia em relação a encontrar ou não atributos de objetos Pais.
+
+~~~php
+class Filho extends Pai {
+
+  public function __get($atributo) {
+    return $this->$atributo;
+  }
+
+  public function __set($atributo, $valor) {
+    $this->$atributo = $valor;
+  }
+}
+
+$filho = new Filho();
+
+echo $filho->__get('nome');
+echo '<br>';
+// Warning: Undefined property: Filho::$nome
+echo $filho->__set('nome', 'João');
+echo $filho->__get('nome');
+// recupera "João" 
+// (novo atributo público criado!)
+~~~ 
+
+### C) Métodos:
+
+Segue a lógica anterior; `public e protected` são herdados, enquanto `private` não são (são restritos ao objetos).
+
+Se utilizarmos o método `get_class_methods` na instância do objeto, não conseguiremos acessa os métodos protegidos. Portanto, podemos solicitar que o próprio objeto exponha seus métodos para aplicação (centro da Classe Filho), exibindo métodos protegidos e privados. Portanto, para debug, podemos utilizar o método `__construct()`, da seguinta forma:
+
+~~~php
+class Filho extends Pai {
+
+  public function __construct() {
+    echo '<pre>';
+    print_r(get_class_methods($this));
+    echo '</pre>';
+  }
+}
+
+/* RETORNO:
+Array
+(
+    [0] => __construct
+    [1] => responder - private
+    [2] => executarAcao - e executarMania() acessada através da lógica
+)
+Filho Object
+(
+    [nome:Pai:private] => Mônica
+    [sobrenome:protected] => Quintal
+    [humor] => com sono
+)
+~~~
+
+Assim como atributos, métodos protected podem ser sobrepostos dentro do objeto filho, e automaticamente ter o seu contexto atualizado!
+
+<hr>
+
+<div id="aula12" align="center">
+<h2>Aula 12: Atributos e métodos estáticos.</h2>
+</div>
+

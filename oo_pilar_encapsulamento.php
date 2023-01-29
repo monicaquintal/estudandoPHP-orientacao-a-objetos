@@ -4,7 +4,7 @@ class Pai {
   private $nome = "Mônica";
   protected $sobrenome = "Quintal";
   public $humor = "com sono";
-
+/*
   public function __get($atributo) {
     return $this->$atributo;
   }
@@ -12,7 +12,7 @@ class Pai {
   public function __set($atributo, $valor) {
     $this->$atributo = $valor;
   }
-
+*/
   private function executarMania() {
     echo "Assoviar";
   }
@@ -33,9 +33,59 @@ class Pai {
   }
 }
 
-$pai = new Pai();
+class Filho extends Pai {
 
+  public function __construct() {
+    echo '<pre>';
+    print_r(get_class_methods($this));
+    echo '</pre>';
+  }
+
+  private function executarMania() {
+    echo "Cantar";
+  }
+
+  protected function responder() {
+    echo "Hello!!";
+  }
+
+  /*
+  public function getAtributo($atributo) {
+    return $this->$atributo;
+  }
+
+  public function setAtributo($atributo, $valor) {
+    $this->$atributo = $valor;
+  } */
+
+/*  public function __get($atributo) {
+    return $this->$atributo;
+  }
+
+  public function __set($atributo, $valor) {
+    $this->$atributo = $valor;
+  }
+*/
+}
+
+$filho = new Filho();
+
+echo '<pre>';
+print_r($filho);
+echo '</pre>';
+
+
+// exibir os métodos do objeto
+/*echo '<pre>';
+print_r(get_class_methods($filho));
+echo '</pre>';*/
+
+
+
+/*
+$pai = new Pai();
 echo $pai->executarAcao();
+*/
 
 /*
 class Pai {
