@@ -1096,3 +1096,152 @@ public static function metodo1 () {
 <div id="aula13" align="center">
 <h2>Aula 13: Interfaces.</h2>
 </div>
+
+Interfaces definem os ***métodos*** cujas classes obrigatoriamente precisam implementar (`NÃO SE APLICA A ATRIBUTOS!`); funcionam como uma espécie de "contrato", fazendo com que as classes que implementem essas respectivas interfaces respeitem os métodos estabelecidos nesses contratos, de modo a fazer com que a nossa aplicação tenha certa homogeneidade.
+
+> arquivo `interfaces.php`
+
+### Modelo estudado nesta aula:
+
+<div align="center">
+<img src="./imagens/interfaces.png" width="80%">
+</div>
+
+`Importante:` interfaces **não implementam métodos**, apenas definem a assinatura daquele método. Quem fará a implementação do método será a classe que implementará aquela respectiva Interface.
+
+Exemplo:
+
+~~~php
+interface EquipamentoEletronicoInterface {
+  public function ligar();
+  public function desligar();
+}
+~~~
+
+Para realizar a implementação da interface, utilizaremos a palavra reservada `implements`.
+
+Outro detalhe importante: todos os **métodos definidos na interface precisam obrigatoriamente ser públicos**!
+
+Para o exemplo acima, teremos:
+
+~~~php
+interface EquipamentoEletronicoInterface {
+  public function ligar();
+  public function desligar();
+}
+
+class Geladeira implements EquipamentoEletronicoInterface {
+  public function abrirPorta() {
+    echo "Abrir a porta!";
+  }
+
+  public function ligar() {
+    echo "Ligar!";
+  }
+
+  public function desligar() {
+    echo "Desligar!";
+  }
+}
+
+class TV implements EquipamentoEletronicoInterface {
+  public function trocarCanal() {
+    echo "Trocar o canal!";
+  }
+  public function ligar() {
+    echo "Ligar!";
+  }
+
+  public function desligar() {
+    echo "Desligar!";
+  }
+}
+
+$x = new Geladeira();
+$y = new TV();
+~~~
+
+Podemos, inclusive, implementar mais de uma interface para a mesma classe, como na situação abaixo.
+
+### Implementando mais de uma interface para a mesma Classe:
+
+<div align="center">
+<img src="./imagens/multiplas-interfaces.png" width="80%">
+</div>
+
+Para o exemplo acima, temos:
+
+~~~php
+interface MamiferoInterface {
+  public function respirar();
+}
+
+interface TerrestreInterface {
+  public function andar();
+}
+
+interface AquaticoInterface {
+  public function nadar();
+}
+
+class Humano implements MamiferoInterface, TerrestreInterface {
+  public function respirar() {
+    echo "Respirar";
+  }
+  public function andar() {
+    echo "Andar";
+  }
+  public function conversar() {
+    echo "Conversar";
+  }
+}
+
+class Baleia implements MamiferoInterface, AquaticoInterface {
+  public function respirar() {
+    echo "Respirar";
+  }
+  public function nadar() {
+    echo "Nadar";
+  }
+  protected function esguichar() {
+    echo "Esguichar";
+  }
+}
+~~~
+
+Quando implementamos mais de uma interface para uma classe, inserir a palavra reservada `implements` e separar as interfaces por `vírgula`!
+
+### Herança entre interfaces:
+
+Podemos, ainda, fazer com que fazer com que interfaces herdem regras estabelecidas em outras interfaces (herdando métodos de uma interface para outra)!
+
+<div align="center">
+<img src="./imagens/extends.png" width="80%">
+</div>
+
+No código:
+
+~~~php
+interface AnimalInterface {
+  public function comer();
+}
+
+interface AveInterface extends AnimalInterface {
+  public function voar();
+}
+
+class Papagaio implements AveInterface {
+  public function voar() {
+    echo "Voar";
+  }
+  public function comer() {
+    echo "Comer";
+  }
+}
+~~~
+
+<hr>
+
+<div id="aula14" align="center">
+<h2>Aula 14: Namespaces parte 1 - Utilizando namespaces para Classes e Interfaces.</h2>
+</div>
