@@ -1215,6 +1215,8 @@ Quando implementamos mais de uma interface para uma classe, inserir a palavra re
 
 Podemos, ainda, fazer com que fazer com que interfaces herdem regras estabelecidas em outras interfaces (herdando métodos de uma interface para outra)!
 
+Utilizar a palavra reservada `extends`!
+
 <div align="center">
 <img src="./imagens/extends.png" width="80%">
 </div>
@@ -1244,4 +1246,160 @@ class Papagaio implements AveInterface {
 
 <div id="aula14" align="center">
 <h2>Aula 14: Namespaces parte 1 - Utilizando namespaces para Classes e Interfaces.</h2>
+</div>
+
+Namespaces possibilitam o agrupamento de classes, interfaces, funções e constantes, visando evitar o conflito entre os seus respectivos nomes. 
+
+> arquivo `namespaces_parte1.php` 
+
+### Exemplo:
+
+<div align="center">
+<img src="./imagens/namespaces1.png" width="80%">
+</div>
+
+Neste caso, temos duas classes com o mesmo nome, o que gerará um erro:
+
+~~~php
+class Cliente {
+  public $nome = "Mônica";
+  public function __get ($atributo) {
+    return $this->$atributo;
+  }
+}
+
+class Cliente {
+  public $nome = "Mônica";
+  public function __get ($atributo) {
+    return $this->$atributo;
+  }
+}
+
+// Fatal error: Cannot declare class Cliente, because the name is already in use
+~~~
+
+Para corrigir esses conflitos, devemos incorporar o conceito de Namespaces, como o modelo a seguir:
+
+<div align="center">
+<img src="./imagens/namespaces2.png" width="80%">
+</div>
+
+Para isso, basta definir um trecho para abertura de determinado `namespace`.
+
+~~~php
+namespace A;
+
+class Cliente {
+  public $nome = "Mônica";
+  public function __get ($atributo) {
+    return $this->$atributo;
+  }
+}
+
+namespace B;
+
+class Cliente {
+  public $nome = "Mônica";
+  public function __get ($atributo) {
+    return $this->$atributo;
+  }
+}
+
+
+/*
+B\Cliente Object 
+     *** // O B corresponde à referência do namespace onde a classe base foi criada!
+
+(
+    [nome] => Mônica
+)
+Mônica
+*/
+
+~~~
+
+**Importante:** não é comum criar scripts que tenham dois namespaces diferentes; o exemplo dado é apenas didático. Quando incorporarmos bibliotecas para as nossas aplicações, precisaremos incluir esses namespaces a partir de outros scripts.
+
+Caso queira acessar um namespace específico, utilizar a sintaxe:
+
+~~~php
+$var = new \namespaceAcessado\Classe();
+~~~
+
+E, no exemplo anterior, teremos:
+
+~~~php
+$c = new \A\Cliente();
+
+/*
+retorno:
+A\Cliente Object
+(
+    [nome] => Mônica
+)
+Mônica
+*/
+~~~
+
+Podemos, inclusive, implementar classes de namespaces diferentes, bastando apenas informar qual o namespace desejado, como no exemplo abaixo:
+
+~~~php
+namespace A;
+class Cliente implements \B\CadastroInterface {
+  public $nome = "Mônica";
+
+  public function __construct() {
+    echo '<pre>';
+    print_r(get_class_methods($this));
+    echo '</pre>';
+  }
+  public function __get ($atributo) {
+    return $this->$atributo;
+  }
+  public function salvar() {
+    echo "Salvar";
+  }
+  public function remover()
+  {
+    echo "Remover";
+  }
+}
+interface CadastroInterface {
+  public function salvar();
+}
+
+namespace B;
+
+class Cliente implements CadastroInterface
+{
+  public $nome = "Mônica";
+  public function __get($atributo)
+  {
+    return $this->$atributo;
+  }
+  public function __construct() {
+    echo '<pre>';
+    print_r(get_class_methods($this));
+    echo '</pre>';
+  }
+  public function remover()
+  {
+    echo "Remover";
+  }
+}
+interface CadastroInterface {
+  public function remover();
+}
+
+$c = new \B\Cliente();
+echo '<pre>';
+print_r($c);
+echo '</pre>';
+echo $c->__get('nome');
+~~~
+
+<hr>
+
+<div id="aula15" align="center">
+<h2>Aula 15: Namespaces parte 2 - Importando e apelidando namespaces (Use e Aliasing).</h2>
 </div>
