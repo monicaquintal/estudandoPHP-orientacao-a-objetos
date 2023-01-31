@@ -1372,7 +1372,7 @@ namespace B;
 
 class Cliente implements CadastroInterface
 {
-  public $nome = "Mônica";
+  public $nome = "João";
   public function __get($atributo)
   {
     return $this->$atributo;
@@ -1391,15 +1391,160 @@ interface CadastroInterface {
   public function remover();
 }
 
-$c = new \B\Cliente();
+
+$c = new \A\Cliente();
 echo '<pre>';
 print_r($c);
 echo '</pre>';
 echo $c->__get('nome');
+
+echo '<hr>';
+
+$d = new \B\Cliente();
+echo '<pre>';
+print_r($d);
+echo '</pre>';
+echo $d->__get('nome');
+
+// retorno
+/*
+Array
+(
+    [0] => __construct
+    [1] => __get
+    [2] => salvar
+    [3] => remover
+)
+A\Cliente Object
+(
+    [nome] => Mônica
+)
+Mônica
+Array
+(
+    [0] => __get
+    [1] => __construct
+    [2] => remover
+)
+B\Cliente Object
+(
+    [nome] => João
+)
+João
+*/
 ~~~
 
 <hr>
 
 <div id="aula15" align="center">
 <h2>Aula 15: Namespaces parte 2 - Importando e apelidando namespaces (Use e Aliasing).</h2>
+</div>
+
+Como podemos importar namespaces de arquivos externos e, nesse processo, como apelida-los?
+
+> arquivos `namespaces_parte2.php` e `diretório bibliotecas`, contendo `lib1.php` -> `diretório lib1` e `lib2.php` -> `diretório lib2`.
+
+Ao implementar códigos prontos, podemos ter conflitos em relação aos nomes de classes, interfaces, funções ou constantes. Por isso utilizamos o recurso "namespaces", para evitar que essas bibliotecas entrem em conflito com os nossos códigos, ou com outras bibliotecas que também foram adicionadas à aplicação!
+
+Apresentado o site/iniciativa [Packagist](https://packagist.org/), que está por trás do Composer (gerenciador de pacotes do PHP). Um dos pacotes mais conhecidos é o `phpmailer`, excelente biblioteca (lib) para envio e recebimento de emails.
+
+Antes de implementar qualquer coisa, verificar se já não existe alguma biblioteca que atenda a necessidade e que possa utilizar na aplicação!
+
+### Como importar namespaces de arquivos externos?
+
+<div align="center">
+<img src="./imagens/namespaces3.png" width="80%">
+</div>
+
+Quando incorporamos bibliotecas dentro da aplicação, elas costumam estar em diretórios específicos, com a sua respectiva codificação encapsulada em um espaço específico, que geralmente leva o nome daquela biblioteca.
+
+Para incorporar os scripts lib1 e lib2 dentro do script da nossa aplicação, podem ser utilizados **require, require_once, include ou include_once**.
+
+`Importante:` a importação é válida apenas para classes e interfaces!!! Para funções e constantes, não se aplica!!!
+
+No exemplo dado em aula, inserida uma classe A na lib1, e classe B na lib2. No arquivo namespaces_parte2.php, temos (utilizando a palavra reservada `use`):
+
+~~~php
+require "./bibliotecas/lib1/lib1.php";
+require "./bibliotecas/lib2/lib2.php";
+
+use B\Cliente;
+
+$c = new Cliente();
+print_r($c);
+echo $c->__get('nome');
+
+// RETORNO
+/*
+Array
+(
+    [0] => __get
+    [1] => __construct
+    [2] => remover
+)
+B\Cliente Object ( [nome] => João ) João
+*/
+~~~
+
+### Use e Aliasing:
+
+E quando é necessário trabalhar com duas bibliotecas, e um objeto de cada uma das classes tanto da lib1 quanto lib2?
+
+Se tentamos acessar como feito no exemplo acima, teremos uma mensagem de erro:
+
+~~~php
+require "./bibliotecas/lib1/lib1.php";
+require "./bibliotecas/lib2/lib2.php";
+
+use A\Cliente;
+use B\Cliente;
+
+// retorno:
+// Fatal error: Cannot use B\Cliente as Cliente because the name is already in use
+~~~
+
+Podemos então utilizar a palavra reservada `as` (Alias), para indicar qual o "apelido" daquela classe, como abaixo (chamado de C1):
+
+~~~php
+require "./bibliotecas/lib1/lib1.php";
+require "./bibliotecas/lib2/lib2.php";
+
+use A\Cliente as C1;
+use B\Cliente;
+
+$c = new Cliente();
+print_r($c);
+echo $c->__get('nome');
+
+echo '<hr>';
+
+$d = new C1();
+print_r($d);
+echo $d->__get('nome');
+
+// RETORNO:
+/*
+Array
+(
+    [0] => __get
+    [1] => __construct
+    [2] => remover
+)
+B\Cliente Object ( [nome] => João ) João
+Array
+------------------------------
+(
+    [0] => __construct
+    [1] => __get
+    [2] => salvar
+    [3] => remover
+)
+A\Cliente Object ( [nome] => Mônica ) Mônica
+*/
+~~~
+
+<hr>
+
+<div id="aula16" align="center">
+<h2>Aula 16: Tratamento de erros - Try, Catch, Finally e Throw.</h2>
 </div>
