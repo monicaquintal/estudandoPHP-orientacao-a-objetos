@@ -1659,3 +1659,53 @@ Exception: O arquivo em questão deveria estar disponível às 30/01/2023 23:35:
 <div id="aula17" align="center">
 <h2>Aula 17: Tratamento de erros - Exceções customizadas.</h2>
 </div>
+
+> arquivo `tratamento_erros_customizados.php`
+
+1. Exceção "padrão":
+
+~~~php
+try {
+  throw new Exception('Esse é um erro de teste');
+} catch (Exception $e) {
+  echo $e;
+}
+~~~
+
+2. Exceção customizada (objetos customizados de erro):
+
+Basta criar uma classe que fará um `extends` de Exception (casse nativa do PHP). Exemplo:
+
+~~~php
+class MinhaExceptionCustomizada extends Exception {
+
+  private $erro = '';
+
+  public function __construct($erro) {
+    $this->erro = $erro;
+  }
+
+  public function exibirMensagemErroCustomizada() {
+    echo '<div style="border: solid 1px #000; padding: 15px; background-color: red; color: white;">';
+      echo $this->erro;
+    echo '</div>';
+  }
+}
+
+try {
+
+  throw new MinhaExceptionCustomizada('Esse é um erro de teste');
+
+  //Error (php)
+  //Exception (programadores)
+  //Customizadas (programadores)
+
+} catch (MinhaExceptionCustomizada $e) {
+  $e->exibirMensagemErroCustomizada();
+}
+~~~
+
+Nós podemos criar objetos baseados nas classes:
+- Error (base para lançamento de erros internos do PHP, não usamos no dia a dia);
+- Exception (programadores, muito comum o seu uso);
+- Customizadas (programadores, muito comum em bibliotecas prontas).
