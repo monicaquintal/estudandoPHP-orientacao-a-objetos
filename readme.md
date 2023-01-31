@@ -1299,7 +1299,7 @@ class Cliente {
 namespace B;
 
 class Cliente {
-  public $nome = "Mônica";
+  public $nome = "João";
   public function __get ($atributo) {
     return $this->$atributo;
   }
@@ -1311,9 +1311,9 @@ B\Cliente Object
      *** // O B corresponde à referência do namespace onde a classe base foi criada!
 
 (
-    [nome] => Mônica
+    [nome] => João
 )
-Mônica
+João
 */
 
 ~~~
@@ -1547,4 +1547,115 @@ A\Cliente Object ( [nome] => Mônica ) Mônica
 
 <div id="aula16" align="center">
 <h2>Aula 16: Tratamento de erros - Try, Catch, Finally e Throw.</h2>
+</div>
+
+O tratamento de erros é a técnica empregada em pontos críticos dos códigos, para tornar a aplicação reativa a erros; ou seja, para torná-la mais inteligente na ocorrência de erros, tornando a experiência do usuário mais agradável! É possível, inclusive, registrar esses erros para uma análise posterior!
+
+> arquivo `tratamento_erros.php`
+
+<div align="center">
+<img src="./imagens/tratamento_de_erros.png" width="80%">
+</div>
+
+### A) Try: tente
+
+Responsável por encapsular todo o conteúdo suscetível a algum erro, onde podemos identificar e controlar uma exceção.
+
+Podemos utilizar quantos try forem necessários!
+
+O try pode ter dois destinos: catch e finally.
+
+### B) Catch: pegar
+
+Caso dê algum erro no try, o catch permite capturar esse erro e realizar alguma tratativa, antes de partir (ou não) para o finally.
+
+### C) Finally: finalmente
+
+Instrução final do tratamento de erros.
+
+**Quando temos "try" e "catch", o "finally" é opcional!**
+
+~~~php
+try {
+  echo '<h3> *** Try *** </h3>';
+
+  $sql = 'Select * from clientes';
+  mysql_query($sql); // erro
+
+} catch (Error $e) {
+
+  echo '<h3> *** Catch *** </h3>';
+  echo '<p style="color: red;">' . $e . '</p>';
+  // a mensagem de erro é impressa
+  // porém a aplicação não "morre"!!
+
+} finally {
+
+  echo '<h3> *** Finally *** </h3>';
+
+}
+~~~
+
+~~~
+// Retorno:
+
+*** Try ***
+
+*** Catch ***
+
+Error: Call to undefined function mysql_query() in C:\xampp\htdocs\estudando-php-oo\tratamento_erros.php:39 Stack trace: #0 {main}
+
+*** Finally ***
+~~~
+
+### D) Throw: lançar
+
+Podemos intencionalmente lançar erros, como abaixo:
+
+~~~php
+try {
+  echo '<h3> *** Try *** </h3>';
+
+  if (!file_exists('require_arquivo_a.php')) { // caso o arquivo não exista
+    throw new Exception('O arquivo em questão deveria estar disponível às ' . date('d/m/Y H:i:s') . ' horas, mas não estava. Vamos seguir mesmo assim.');
+    //classe já definida de forma nativa no PHP
+    // usada para criação de novo objeto do tipo exceção.
+    // lanca exceção que será capturada no catch
+  }
+
+} catch (Error $e) {
+
+  echo '<h3> *** Catch Error *** </h3>';
+  echo '<p style="color: red;">' . $e . '</p>';
+  // armazenando esse erro em BD
+
+} catch (Exception $e) {
+
+  echo '<h3> *** Catch Exception *** </h3>';
+  echo '<p style="color: red;">' . $e . '</p>';
+  // armazenando esse erro em BD
+
+} finally {
+
+  echo '<h3> *** Finally *** </h3>';
+
+}
+~~~
+
+~~~
+Retorno:
+
+*** Try ***
+
+*** Catch Exception ***
+
+Exception: O arquivo em questão deveria estar disponível às 30/01/2023 23:35:39 horas, mas não estava. Vamos seguir mesmo assim. in C:\xampp\htdocs\estudando-php-oo\tratamento_erros.php:10 Stack trace: #0 {main}
+
+*** Finally ***
+~~~
+
+<hr>
+
+<div id="aula17" align="center">
+<h2>Aula 17: Tratamento de erros - Exceções customizadas.</h2>
 </div>
